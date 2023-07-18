@@ -1,0 +1,12 @@
+{
+  "name": "@fgcos/source",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "private": true,
+  "devDependencies": {
+    "@nx/workspace": "16.5.2",
+    "@nxrocks/nx-flutter": "^7.0.3",
+    "nx": "16.5.2"
+  }
+}
