@@ -1,0 +1,100 @@
+---
+title: Configuration
+description: Applies some Revision configurations
+privilege: TrustedInstaller
+actions:
+  - !taskKill: {name: "explorer"}
+  - !run: {exe: 'PowerShell', args: '-NonInteractive -NoLogo -NoProfile -Command "Get-CimInstance -Namespace "Root\cimv2\mdm\dmmap" -ClassName "MDM_EnterpriseModernAppManagement_AppManagement01" | Invoke-CimMethod -MethodName UpdateScanMethod"', showOutput: false, showError: false}
+
+  - !writeStatus: {status: "Configuring power settings"}
+  - !run: {exe: 'powercfg', args: '/hibernate off', showOutput: false, showError: false}
+  - !run: {exe: 'powercfg', args: '-duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61', showOutput: false, showError: false}
+  - !run: {exe: 'powercfg', args: '-duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61 3ff9831b-6f80-4830-8178-736cd4229e7b', showOutput: false, showError: false}
+  - !run: {exe: 'powercfg', args: '-changename 3ff9831b-6f80-4830-8178-736cd4229e7b "Ultra Performance" "Windows''s Ultimate Performance with additional changes."', showOutput: false, showError: false}
+  - !run: {exe: 'powercfg', args: '-s 3ff9831b-6f80-4830-8178-736cd4229e7b', showOutput: false, showError: false}
+  - !run: {exe: 'powercfg', args: '-setacvalueindex scheme_current sub_processor PERFINCPOL 2', showOutput: false, showError: false}
+  - !run: {exe: 'powercfg', args: '-setacvalueindex scheme_current sub_processor PERFDECPOL 1', showOutput: false, showError: false}
+  - !run: {exe: 'powercfg', args: '-setacvalueindex scheme_current sub_processor PERFINCTHRESHOLD 10', showOutput: false, showError: false}
+  - !run: {exe: 'powercfg', args: '-setacvalueindex scheme_current sub_processor PERFDECTHRESHOLD 8', showOutput: false, showError: false}
+  - !run: {exe: 'powercfg', args: '/setactive scheme_current', showOutput: false, showError: false}
+  - !run: {exe: 'schtasks', args: '/change /tn "\Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem" /disable', showOutput: false}
+  - !run: {exe: 'schtasks', args: '/change /tn "\Microsoft\Windows\MemoryDiagnostic\ProcessMemoryDiagnosticEvents" /disable', showOutput: false}
+  - !run: {exe: 'schtasks', args: '/change /tn "\Microsoft\Windows\MemoryDiagnostic\RunFullMemoryDiagnostic" /disable', showOutput: false}
+  - !run: {exe: 'schtasks', args: '/change /tn "\Microsoft\Windows\WindowsUpdate\Scheduled Start" /disable', showOutput: false}
+  - !run: {exe: 'schtasks', args: '/change /tn "\Microsoft\Windows\Windows Error Reporting\QueueReporting" /disable', showOutput: false}
+  - !run: {exe: 'schtasks', args: '/change /tn "\Microsoft\Windows\Application Experience\AitAgent" /disable', showOutput: false}
+  - !run: {exe: 'schtasks', args: '/change /tn "\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /disable', showOutput: false}
+  - !run: {exe: 'wevtutil', args: 'sl Microsoft-Windows-SleepStudy/Diagnostic /e:false', showOutput: false}
+  - !run: {exe: 'wevtutil', args: 'sl Microsoft-Windows-Kernel-Processor-Power/Diagnostic /e:false', showOutput: false}
+  - !run: {exe: 'wevtutil', args: 'sl Microsoft-Windows-UserModePowerService/Diagnostic /e:false', showOutput: false}
+
+  - !writeStatus: {status: "Configuring boot settings"}
+  - !run: {exe: 'bcdedit', args: '/deletevalue useplatformclock', showOutput: false, showError: false}
+    # bcdedit /set useplatformtick yes
+  - !run: {exe: 'bcdedit', args: '/set disabledynamictick yes', showOutput: false, showError: false}
+  - !run: {exe: 'bcdedit', args: '/set bootmenupolicy Legacy', showOutput: false, showError: false}
+  - !run: {exe: 'bcdedit', args: '/set lastknowngood yes', showOutput: false, showError: false}
+
+  - !writeStatus: {status: "Optimizing NTFS settings"}
+  - !run: {exe: 'fsutil', args: 'behavior set disableLastAccess 1', showOutput: false}
+  - !run: {exe: 'fsutil', args: 'behavior set disable8dot3 1', showOutput: false}
+
+  - !writeStatus: {status: "Configuring network settings"}
+  - !run: {exe: 'netsh', args: 'interface Teredo set state type=default', showOutput: false, showError: false}
+  - !run: {exe: 'netsh', args: 'interface Teredo set state servername=default', showOutput: false, showError: false}
+  - !run: {exe: 'netsh', args: 'int tcp set supplemental internet congestionprovider=bbr2', showOutput: false, showError: false}
+
+  - !writeStatus: {status: "Configuring Windows settings"}
+  - !run: {exe: 'net', args: 'accounts /maxpwage:unlimited', showOutput: false}
+  - !registryValue: {path: 'HKCU\System\GameConfigStore', value: 'GameDVR_FSEBehaviorMode', type: REG_DWORD, data: '0'}
+    # reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /f >NUL 2>nul
+    # reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "ctfmon" /t REG_SZ /d "C:\Windows\System32\ctfmon.exe" /f >NUL 2>nul
+  - !registryValue: {path: 'HKLM\SYSTEM\ControlSet001\Control\Session Manager', value: 'HeapDeCommitFreeBlockThreshold', type: REG_DWORD, data: '0'}
+  - !registryValue: {path: 'HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32', value: '', type: REG_SZ, data: ''}
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize', value: 'AppsUseLightTheme', type: REG_DWORD, data: '0'}
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize', value: 'SystemUsesLightTheme', type: REG_DWORD, data: '0'}
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications', value: 'GlobalUserDisabled', type: REG_DWORD, data: '1'}
+  - !registryValue: {path: 'HKCU\Control Panel\International\User Profile', value: 'HttpAcceptLanguageOptOut', type: REG_DWORD, data: '1'}
+
+    # Add Task Manager to taskbar right click
+  - !registryValue: {path: 'HKLM\SYSTEM\ControlSet001\Control\FeatureManagement\Overrides\4\1887869580', value: 'EnabledState', type: REG_DWORD, data: '2'}
+  - !registryValue: {path: 'HKLM\SYSTEM\ControlSet001\Control\FeatureManagement\Overrides\4\1887869580', value: 'EnabledStateOptions', type: REG_DWORD, data: '0'}
+
+    # Remove Widget button, only useful for the final explorer restart, since it will still show otherwise until the system is restarted.
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'TaskbarDa', type: REG_DWORD, data: '0'}
+
+  - !run: {exe: 'PowerShell', args: '-NonInteractive -NoLogo -NoProfile -Command "Rename-Computer -NewName $env:computername"', showOutput: false, showError: false}
+  - !run: {exe: 'PowerShell', args: '-NonInteractive -NoLogo -NoProfile -Command "Disable-MMAgent -mc"', showOutput: false, showError: false}
+  - !run: {exe: 'PowerShell', args: '-NonInteractive -NoLogo -NoProfile -Command "Disable-WindowsErrorReporting"', showOutput: false, showError: false}
+  - !run: {exe: 'powershell', args: '-NonInteractive -NoLogo -NoProfile Set-ProcessMitigation -Name vgc.exe -Enable CFG', showOutput: false}
+  - !cmd: {exeDir: true, command: '@echo Disable-MMAgent -MC; ForEach($v in (Get-Command -Name "Set-ProcessMitigation").Parameters["Disable"].Attributes.ValidValues){Set-ProcessMitigation -System -Disable $v.ToString().Replace(" ", "").Replace("`n", "")}; rm $PSCommandPath> MC_PM.ps1'}
+  - !run: {exeDir: true, exe: 'powershell', args: '-windowstyle hidden -ExecutionPolicy Bypass -C "& ''./MC_PM.ps1''"'}
+  - !run: {exe: 'setx', args: 'DOTNET_CLI_TELEMETRY_OPTOUT 1'}
+  - !run: {exe: 'setx', args: 'POWERSHELL_TELEMETRY_OPTOUT 1'}
+
+    # OneDrive workaround
+  - !registryValue: {path: 'HKLM\Software\Policies\Microsoft\Windows\OneDrive', value: 'DisableFileSyncNGSC', operation: delete}
+
+  - !run: {exeDir: true, exe: "APPLICATIONS.bat", wait: true, weight: 60}
+
+    # Windows Defender
+  - !run: {path: "%ProgramFiles(x86)%\\Revision Tool\\data\\flutter_assets\\additionals", exe: "DisableWD.bat", wait: true}
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows Defender', value: 'InstallLocation', operation: delete}
+
+  - !run: {exeDir: true, exe: "FINALIZE.bat", weight: 25}
+
+  - !run:
+    exeDir: true
+    exe: "STARTMENU.bat"
+    weight: 20
+  - !run:
+    exeDir: true
+    exe: "FILEASSOC.bat"
+    weight: 90
+  - !run:
+    exeDir: true
+    exe: "WALLPAPER.bat"
+    weight: 20
+
+    # Start as user process to prevent weird look due to running as TrustedInstaller
+  - !run: {baseDir: true, exe: "NSudoLC.exe", args: '-U:C -UseCurrentConsole explorer.exe'}
