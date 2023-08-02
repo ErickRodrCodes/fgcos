@@ -4,9 +4,9 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 @REM :: Set wallpaper path for new users, as well as dark/light theme
 @REM type "!windir!\Resources\Themes\aero.theme" | findstr /c:"AppMode=" > nul
 @REM if !errorlevel! == 0 (
-@REM 	PowerShell -NoP -C "$Content = (Get-Content '!windir!\Resources\Themes\aero.theme'); $Content = $Content -replace 'Wallpaper=%%SystemRoot%%.*', 'Wallpaper=%%SystemRoot%%\web\wallpaper\Windows\revision.jpg'; $Content = $Content -replace 'SystemMode=.*', 'SystemMode=Dark'; $Content -replace 'AppMode=.*', 'AppMode=Dark' | Set-Content '!windir!\Resources\Themes\aero.theme'"
+@REM 	PowerShell -NoP -C "$Content = (Get-Content '!windir!\Resources\Themes\aero.theme'); $Content = $Content -replace 'Wallpaper=%%SystemRoot%%.*', 'Wallpaper=%%SystemRoot%%\web\wallpaper\Windows\fgcos.jpg'; $Content = $Content -replace 'SystemMode=.*', 'SystemMode=Dark'; $Content -replace 'AppMode=.*', 'AppMode=Dark' | Set-Content '!windir!\Resources\Themes\aero.theme'"
 @REM ) else (
-@REM 	PowerShell -NoP -C "$Content = (Get-Content '!windir!\Resources\Themes\aero.theme'); $Content = $Content -replace 'Wallpaper=%%SystemRoot%%.*', 'Wallpaper=%%SystemRoot%%\web\wallpaper\Windows\revision.jpg'; $Content = $Content -replace 'SystemMode=.*', """"SystemMode=Dark`nAppMode=Dark"""" | Set-Content '!windir!\Resources\Themes\aero.theme'"
+@REM 	PowerShell -NoP -C "$Content = (Get-Content '!windir!\Resources\Themes\aero.theme'); $Content = $Content -replace 'Wallpaper=%%SystemRoot%%.*', 'Wallpaper=%%SystemRoot%%\web\wallpaper\Windows\fgcos.jpg'; $Content = $Content -replace 'SystemMode=.*', """"SystemMode=Dark`nAppMode=Dark"""" | Set-Content '!windir!\Resources\Themes\aero.theme'"
 @REM )
 
 @REM for /f "usebackq tokens=2 delims=\" %%a in (`reg query "HKEY_USERS" ^| findstr /r /x /c:"HKEY_USERS\\S-.*" /c:"HKEY_USERS\\AME_UserHive_[^_]*"`) do (
@@ -22,7 +22,7 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 :: Clear lockscreen cache
 for /d %%x in ("!ProgramData!\Microsoft\Windows\SystemData\*") do (
 	for /d %%y in ("%%x\ReadOnly\LockScreen_*") do (
-		rd /s /q "%%y" 
+		rd /s /q "%%y"
 	)
 )
 
@@ -34,12 +34,12 @@ for /d %%x in ("!ProgramData!\Microsoft\Windows\SystemData\*") do (
 @REM 	if !errorlevel! == 1 (
 @REM 		exit /b 0
 @REM 	)
-@REM ) 
+@REM )
 
-@REM if not exist "!windir!\Web\Wallpaper\Windows\revision.jpg" exit /b 1
+@REM if not exist "!windir!\Web\Wallpaper\Windows\fgcos.jpg" exit /b 1
 
-@REM reg add "HKEY_USERS\%~1\Control Panel\Desktop" /v "Wallpaper" /t REG_SZ /d "!windir!\Web\Wallpaper\Windows\revision.jpg" /f
-@REM reg add "HKCU\Control Panel\Desktop" /v "Wallpaper" /t REG_SZ /d "!windir!\Web\Wallpaper\Windows\revision.jpg" /f
+@REM reg add "HKEY_USERS\%~1\Control Panel\Desktop" /v "Wallpaper" /t REG_SZ /d "!windir!\Web\Wallpaper\Windows\fgcos.jpg" /f
+@REM reg add "HKCU\Control Panel\Desktop" /v "Wallpaper" /t REG_SZ /d "!windir!\Web\Wallpaper\Windows\fgcos.jpg" /f
 
 rmdir /q /s "!appdata!\Microsoft\Windows\Themes"
 rundll32.exe user32.dll, UpdatePerUserSystemParameters
