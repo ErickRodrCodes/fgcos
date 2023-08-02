@@ -44,3 +44,5 @@ features:
 - features\revision\registry\restore-windows-photo-viewer-all-users.yml
 - features\revision\registry\revision-static-edition.yml
 - features\revision\registry\revision-static-oem-information.yml
+# FGCOS Exclusive addons
+- features\fgcos\registry\edition.yml

@@ -1,0 +1,9 @@
+---
+title: Services
+description: Removal and configuration of services
+privilege: TrustedInstaller
+actions:
+
+  - !writeStatus: {status: "Configuring services"}
+    # === have printing stopped,manual mode
+  - !service: {name: "spoolsv", operation: stop}
