@@ -1,0 +1,43 @@
+---
+title: BCEDIT Tweaks
+description: applies BCEDIT commands we do manually on each setup. This is supposed to be one of the last things to run
+privilege: TrustedInstaller
+actions:
+
+  - !writeStatus: {status: "Running Melody's BCEDIT Tweaks"}
+
+  # Disable 57-bits 5-level paging, also known as "Linear Address 57". Only 100% effective on 10th gen Intel. 256 TB of virtual
+  # memory per-disk is way much more than enough anyway.
+  - !cmd: {command: 'bcdedit /set linearaddress57 OptOut', weight: 30}
+  - !cmd: {command: 'bcdedit /set increaseuserva 268435328', weight: 30}
+
+  # Avoid the use of uncontiguous portions of low-memory from the OS. Boosts memory performance and improves microstuttering at
+  # least 80% of the cases. Also fixes the command buffer stutter after disabling 5-level paging on 10th gen Intel. Causes system
+  # freeze on unstable memory sticks.
+  - !cmd: {command: 'bcdedit /set firstmegabytepolicy UseAll', weight: 30}
+  - !cmd: {command: 'bcdedit /set avoidlowmemory 0x8000000', weight: 30}
+  - !cmd: {command: 'bcdedit /set nolowmem Yes', weight: 30}
+
+  # Disable some of the kernel memory mitigations. Causes boot crash/loops if Intel SGX is enforced and not set to "Application Controlled"
+  # or "Off" in your Firmware. Gamers don't use SGX under any possible circumstance.
+  - !cmd: {command: 'bcdedit /set allowedinmemorysettings 0x0', weight: 30}
+  - !cmd: {command: 'bcdedit /set isolatedcontext No', weight: 30}
+
+  # Disable DMA memory protection and cores isolation ("virtualization-based protection").
+  - !cmd: {command: 'bcdedit /set vsmlaunchtype Off', weight: 30}
+  - !cmd: {command: 'bcdedit /set vm No', weight: 30}
+
+  # Enable X2Apic and enable Memory Mapping for PCI-E devices.
+  - !cmd: {command: 'bcdedit /set x2apicpolicy Enable', weight: 30}
+  - !cmd: {command: 'bcdedit /set configaccesspolicy Default', weight: 30}
+  - !cmd: {command: 'bcdedit /set MSI Default', weight: 30}
+  - !cmd: {command: 'bcdedit /set usephysicaldestination No', weight: 30}
+  - !cmd: {command: 'bcdedit /set usefirmwarepcisettings No', weight: 30}
+
+  # Disable synthetic TSC tick and use accurate RTC instead (not to be confused with useplatformclock). Enable HPET in BIOS for best results.
+  # Only for untweaked systems (TSC recommended instead on tweaked systems).
+  - !cmd: {command: 'bcdedit /deletevalue useplatformclock', weight: 30}
+  - !cmd: {command: 'bcdedit /deletevalue disabledynamictick', weight: 30}
+  - !cmd: {command: 'bcdedit /set useplatformtick Yes', weight: 30}
+  - !cmd: {command: 'bcdedit /set tscsyncpolicy Enhanced', weight: 30}
+
