@@ -1,0 +1,63 @@
+{
+  "name": "fgcos-ameliorated",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/fgcos-ameliorated/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/fgcos-ameliorated",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/fgcos-ameliorated/src/main.ts",
+        "tsConfig": "apps/fgcos-ameliorated/tsconfig.app.json",
+        "assets": ["apps/fgcos-ameliorated/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "fgcos-ameliorated:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "fgcos-ameliorated:build:development"
+        },
+        "production": {
+          "buildTarget": "fgcos-ameliorated:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/fgcos-ameliorated/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,16 +1,22 @@
-# dipswitch
 
-A new Flutter project.
 
-## Getting Started
+<img  src="windows/runner/resources/app_icon.ico" width="128" height="128" />
 
-This project is a starting point for a Flutter application.
+# Dipswitch
+[![Releases](https://img.shields.io/github/v/release/tbogard/dipswitch.svg)](https://github.com/tbogard/dipswitch/releases)
+[![License](https://img.shields.io/github/license/tbogard/dipswitch.svg)](https://github.com/tbogard/dipswitch/blob/main/LICENSE)
+[![Made with Fluent Design](https://img.shields.io/badge/fluent-design-blue?style=flat-square&color=gray&labelColor=0078D7)](https://github.com/bdlukaa/fluent_ui)
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+A tool to personalize FGCOS to your needs. Rewritten in Dart with Fluent UI.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The program is meant to be only used on [ReviOS](https://www.revi.cc/) 22.10 or up, and [FGCOS](https://www.fgcos.cc)
+
+## License
+
+Dipswitch is licensed under GNU General Public License v3.0. 
+
+The tool also contains:
+* [NanaRun](https://github.com/M2Team/NanaRun) - MIT
+* [Fluent System Icons](https://github.com/microsoft/fluentui-system-icons) by Microsoft - MIT
+

@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create a report to help us improve FGCOS
 title: ''
 labels: ''
 assignees: ''
@@ -9,6 +9,9 @@ assignees: ''
 
 **Describe the bug**
 A clear and concise description of what the bug is.
+
+**Machine description**
+Please indicate a detailed description of your machine. You can use [HWINFO](https://www.hwinfo.com/download/) to generate a text report.
 
 **To Reproduce**
 Steps to reproduce the behavior:
